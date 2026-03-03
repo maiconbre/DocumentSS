@@ -1,0 +1,72 @@
+.form {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #111827;
+}
+
+.field {
+    margin-bottom: 16px;
+}
+
+.field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.field input,
+.field textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #111827;
+    background: #f9fafb;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.field input:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.field textarea {
+    resize: vertical;
+}
+
+.button {
+    width: 100%;
+    padding: 10px 20px;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.button:hover:not(:disabled) {
+    background: #4f46e5;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

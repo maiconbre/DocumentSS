@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "rootDir": ".",
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@domain/*": [
+                "./src/domain/*"
+            ],
+            "@application/*": [
+                "./src/application/*"
+            ],
+            "@infra/*": [
+                "./src/infra/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "prisma/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
