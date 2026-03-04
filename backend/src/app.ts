@@ -7,6 +7,7 @@ import { documentRoutes } from './infra/http/routes/document.routes'
 export async function buildApp(): Promise<FastifyInstance> {
     const app = Fastify({
         logger: true,
+        bodyLimit: 50 * 1024 * 1024,
     })
 
     // Plugins

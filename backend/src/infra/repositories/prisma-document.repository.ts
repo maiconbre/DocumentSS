@@ -4,6 +4,7 @@ import { DocumentStatus } from '../../domain/enums/document-status.enum'
 import {
     DocumentRepository,
     CreateDocumentData,
+    CreateFileData,
     FindAllParams,
     PaginatedResult,
 } from '../../domain/repositories/document.repository'
@@ -36,12 +37,13 @@ export class PrismaDocumentRepository implements DocumentRepository {
                 skip,
                 take: limit,
                 orderBy: { criadoEm: 'desc' },
+                include: { arquivos: true },
             }),
             this.prisma.document.count({ where }),
         ])
 
         return {
-            data: records.map(DocumentMapper.toDomain),
+            data: records.map((r) => DocumentMapper.toDomainWithFiles(r)),
             meta: {
                 page,
                 limit,
@@ -54,25 +56,55 @@ export class PrismaDocumentRepository implements DocumentRepository {
     async findById(id: string): Promise<Document | null> {
         const record = await this.prisma.document.findUnique({
             where: { id },
+            include: { arquivos: true },
         })
 
         if (!record) return null
 
-        return DocumentMapper.toDomain(record)
+        return DocumentMapper.toDomainWithFiles(record)
     }
 
     async updateStatus(id: string, status: DocumentStatus): Promise<Document> {
         const record = await this.prisma.document.update({
             where: { id },
             data: { status },
+            include: { arquivos: true },
         })
 
-        return DocumentMapper.toDomain(record)
+        return DocumentMapper.toDomainWithFiles(record)
     }
 
     async delete(id: string): Promise<void> {
         await this.prisma.document.delete({
             where: { id },
+        })
+    }
+
+    async addFiles(documentId: string, files: CreateFileData[]): Promise<void> {
+        await this.prisma.documentFile.createMany({
+            data: files.map((f) => ({
+                name: f.name,
+                type: f.type,
+                data: f.data,
+                documentId,
+            })),
+        })
+    }
+
+    async getFiles(documentId: string): Promise<CreateFileData[]> {
+        const files = await this.prisma.documentFile.findMany({
+            where: { documentId },
+        })
+        return files.map((f) => ({
+            name: f.name,
+            type: f.type,
+            data: f.data,
+        }))
+    }
+
+    async deleteFile(fileId: string): Promise<void> {
+        await this.prisma.documentFile.delete({
+            where: { id: fileId },
         })
     }
 }

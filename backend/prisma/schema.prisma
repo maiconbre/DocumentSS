@@ -18,6 +18,18 @@ model Document {
   descricao String?        @db.Text
   status    DocumentStatus @default(PENDENTE)
   criadoEm  DateTime       @default(now()) @map("criado_em")
+  arquivos  DocumentFile[]
 
   @@map("documents")
+}
+
+model DocumentFile {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  data      String   @db.Text
+  documentId String  @map("document_id")
+  document  Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@map("document_files")
 }

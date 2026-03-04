@@ -3,13 +3,20 @@ import { DocumentStatus } from '../../src/domain/enums/document-status.enum'
 import {
     DocumentRepository,
     CreateDocumentData,
+    CreateFileData,
     FindAllParams,
     PaginatedResult,
 } from '../../src/domain/repositories/document.repository'
 import { randomUUID } from 'crypto'
 
+interface StoredFile extends CreateFileData {
+    id: string
+    documentId: string
+}
+
 export class FakeDocumentRepository implements DocumentRepository {
     private documents: Document[] = []
+    private files: StoredFile[] = []
 
     async create(data: CreateDocumentData): Promise<Document> {
         const document = new Document({
@@ -50,7 +57,22 @@ export class FakeDocumentRepository implements DocumentRepository {
     }
 
     async findById(id: string): Promise<Document | null> {
-        return this.documents.find((d) => d.id === id) ?? null
+        const doc = this.documents.find((d) => d.id === id)
+        if (!doc) return null
+
+        // Retorna o documento com seus arquivos associados
+        const docFiles = this.files
+            .filter((f) => f.documentId === id)
+            .map(({ id: fileId, name, type, data }) => ({ id: fileId, name, type, data }))
+
+        return new Document({
+            id: doc.id,
+            titulo: doc.titulo,
+            descricao: doc.descricao,
+            status: doc.status,
+            criadoEm: doc.criadoEm,
+            arquivos: docFiles.length > 0 ? docFiles : undefined,
+        })
     }
 
     async updateStatus(id: string, status: DocumentStatus): Promise<Document> {
@@ -67,10 +89,32 @@ export class FakeDocumentRepository implements DocumentRepository {
 
     async delete(id: string): Promise<void> {
         this.documents = this.documents.filter((d) => d.id !== id)
+        this.files = this.files.filter((f) => f.documentId !== id)
+    }
+
+    async addFiles(documentId: string, files: CreateFileData[]): Promise<void> {
+        for (const file of files) {
+            this.files.push({
+                id: randomUUID(),
+                documentId,
+                ...file,
+            })
+        }
+    }
+
+    async getFiles(documentId: string): Promise<CreateFileData[]> {
+        return this.files
+            .filter((f) => f.documentId === documentId)
+            .map(({ name, type, data }) => ({ name, type, data }))
+    }
+
+    async deleteFile(fileId: string): Promise<void> {
+        this.files = this.files.filter((f) => f.id !== fileId)
     }
 
     // Helper para testes
     clear() {
         this.documents = []
+        this.files = []
     }
 }

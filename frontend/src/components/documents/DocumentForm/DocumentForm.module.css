@@ -1,28 +1,19 @@
 .form {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
-}
-
-.title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0 0 16px 0;
-    color: #111827;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .field {
-    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .field label {
-    display: block;
     font-size: 0.875rem;
     font-weight: 500;
     color: #374151;
-    margin-bottom: 6px;
 }
 
 .field input,
@@ -31,7 +22,7 @@
     padding: 10px 14px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: #111827;
     background: #f9fafb;
     transition: border-color 0.2s;
@@ -41,18 +32,19 @@
 .field input:focus,
 .field textarea:focus {
     outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
 }
 
 .field textarea {
     resize: vertical;
+    min-height: 100px;
 }
 
 .button {
     width: 100%;
     padding: 10px 20px;
-    background: #6366f1;
+    background: #f59e0b;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -63,10 +55,21 @@
 }
 
 .button:hover:not(:disabled) {
-    background: #4f46e5;
+    background: #d97706;
 }
 
 .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.inputError {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.errorText {
+    font-size: 0.8125rem;
+    color: #ef4444;
+    margin-top: 2px;
 }

@@ -1,0 +1,100 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.instruction {
+  color: #4b5563;
+  font-size: 0.9375rem;
+  text-align: center;
+  margin: 0;
+}
+
+.canvasWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.canvas {
+  cursor: crosshair;
+  touch-action: none;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.hint {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.btnClear,
+.btnCancel,
+.btnConfirm {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+}
+
+.btnClear {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.btnClear:hover {
+  background: #fde68a;
+}
+
+.btnCancel {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btnCancel:hover {
+  background: #fecaca;
+}
+
+.btnConfirm {
+  background: #10b981;
+  color: white;
+}
+
+.btnConfirm:hover:not(:disabled) {
+  background: #059669;
+}
+
+.btnConfirm:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,4 +1,4 @@
-import styles from './status-badge.module.css'
+import styles from './StatusBadge.module.css'
 
 interface StatusBadgeProps {
     status: 'PENDENTE' | 'ASSINADO'

@@ -10,12 +10,15 @@ import {
     updateDocumentStatusSchema,
     deleteDocumentSchema,
     listDocumentsSchema,
+    addFilesSchema,
+    getFilesSchema,
+    deleteFileSchema,
 } from '../schemas/document.schema'
 
-/**
- * Registra as rotas de documentos na instância Fastify.
- * Aceita um repositório injetável para facilitar testes.
- */
+interface AddFilesBody {
+    arquivos: { name: string; type: string; data: string }[]
+}
+
 export function registerDocumentRoutes(app: FastifyInstance, repository: DocumentRepository) {
     const controller = new DocumentController(repository)
 
@@ -48,9 +51,26 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
         { schema: deleteDocumentSchema },
         (request, reply) => controller.delete(request, reply),
     )
+
+    app.post<{ Params: { id: string }; Body: AddFilesBody }>(
+        '/documents/:id/files',
+        { schema: addFilesSchema },
+        (request, reply) => controller.addFiles(request, reply),
+    )
+
+    app.get<{ Params: { id: string } }>(
+        '/documents/:id/files',
+        { schema: getFilesSchema },
+        (request, reply) => controller.getFiles(request, reply),
+    )
+
+    app.delete<{ Params: { documentId: string; fileId: string } }>(
+        '/documents/:documentId/files/:fileId',
+        { schema: deleteFileSchema },
+        (request, reply) => controller.deleteFile(request, reply),
+    )
 }
 
-/** Plugin Fastify para produção — usa PrismaDocumentRepository */
 export async function documentRoutes(app: FastifyInstance) {
     const repository = new PrismaDocumentRepository(prisma)
     registerDocumentRoutes(app, repository)

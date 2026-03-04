@@ -6,6 +6,12 @@ export interface CreateDocumentData {
     descricao?: string
 }
 
+export interface CreateFileData {
+    name: string
+    type: string
+    data: string
+}
+
 export interface FindAllParams {
     page?: number
     limit?: number
@@ -28,4 +34,7 @@ export interface DocumentRepository {
     findById(id: string): Promise<Document | null>
     updateStatus(id: string, status: DocumentStatus): Promise<Document>
     delete(id: string): Promise<void>
+    addFiles(documentId: string, files: CreateFileData[]): Promise<void>
+    getFiles(documentId: string): Promise<CreateFileData[]>
+    deleteFile(fileId: string): Promise<void>
 }

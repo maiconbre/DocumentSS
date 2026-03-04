@@ -1,0 +1,111 @@
+.container {
+  width: 100%;
+}
+
+.dropzone {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fafafa;
+}
+
+.dropzone:hover,
+.dropzone.dragOver {
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.input {
+  display: none;
+}
+
+.icon {
+  font-size: 1.25rem;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.text {
+  color: #6b7280;
+  font-size: 0.8125rem;
+  margin: 0;
+  display: inline;
+  vertical-align: middle;
+}
+
+.link {
+  color: #d97706;
+  text-decoration: underline;
+}
+
+.hint {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  margin: 4px 0 0 0;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+
+.fileList {
+  list-style: none;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.fileIcon {
+  font-size: 1rem;
+}
+
+.fileName {
+  font-weight: 500;
+  color: #1f2937;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileSize {
+  color: #9ca3af;
+}
+
+.removeBtn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  border-radius: 4px;
+}
+
+.removeBtn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}

@@ -108,3 +108,124 @@ export const listDocumentsSchema = {
         additionalProperties: false,
     },
 }
+
+export const addFilesSchema = {
+    tags: ['Files'],
+    summary: 'Adicionar arquivos ao documento',
+    description: 'Adiciona um ou mais arquivos (Base64) a um documento existente',
+    params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+            id: { type: 'string', format: 'uuid' },
+        },
+    },
+    body: {
+        type: 'object',
+        required: ['arquivos'],
+        properties: {
+            arquivos: {
+                type: 'array',
+                minItems: 1,
+                items: {
+                    type: 'object',
+                    required: ['name', 'type', 'data'],
+                    properties: {
+                        name: { type: 'string', minLength: 1 },
+                        type: { type: 'string', minLength: 1 },
+                        data: { type: 'string', minLength: 1 },
+                    },
+                    additionalProperties: false,
+                },
+            },
+        },
+        additionalProperties: false,
+    },
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                id: { type: 'string', format: 'uuid' },
+                titulo: { type: 'string' },
+                descricao: { type: 'string', nullable: true },
+                status: { type: 'string', enum: ['PENDENTE', 'ASSINADO'] },
+                criadoEm: { type: 'string', format: 'date-time' },
+                arquivos: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'string', format: 'uuid' },
+                            name: { type: 'string' },
+                            type: { type: 'string' },
+                            data: { type: 'string' },
+                        },
+                    },
+                },
+            },
+        },
+        404: {
+            type: 'object',
+            properties: {
+                statusCode: { type: 'integer' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+            },
+        },
+    },
+}
+
+export const getFilesSchema = {
+    tags: ['Files'],
+    summary: 'Listar arquivos do documento',
+    description: 'Retorna todos os arquivos vinculados a um documento',
+    params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+            id: { type: 'string', format: 'uuid' },
+        },
+    },
+    response: {
+        200: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    name: { type: 'string' },
+                    type: { type: 'string' },
+                    data: { type: 'string' },
+                },
+            },
+        },
+        404: {
+            type: 'object',
+            properties: {
+                statusCode: { type: 'integer' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+            },
+        },
+    },
+}
+
+export const deleteFileSchema = {
+    tags: ['Files'],
+    summary: 'Deletar arquivo',
+    description: 'Remove um arquivo específico de um documento',
+    params: {
+        type: 'object',
+        required: ['documentId', 'fileId'],
+        properties: {
+            documentId: { type: 'string', format: 'uuid' },
+            fileId: { type: 'string', format: 'uuid' },
+        },
+    },
+    response: {
+        204: {
+            type: 'null',
+            description: 'Arquivo removido com sucesso',
+        },
+    },
+}
+

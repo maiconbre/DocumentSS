@@ -24,5 +24,4 @@ Thumbs.db
 coverage/
 
 # Documentation & Tests
-doc/
-test/
+.doc/

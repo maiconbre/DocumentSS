@@ -1,0 +1,95 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.icon.danger {
+  color: #dc2626;
+}
+
+.icon.warning {
+  color: #f59e0b;
+}
+
+.message {
+  text-align: center;
+  color: #4b5563;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btnCancel,
+.btnConfirm {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  flex: 1;
+  max-width: 140px;
+}
+
+.btnCancel {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.btnCancel:hover {
+  background: #e5e7eb;
+}
+
+.btnConfirm.danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btnConfirm.danger:hover {
+  background: #b91c1c;
+}
+
+.btnConfirm.warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.btnConfirm.warning:hover {
+  background: #d97706;
+}
+
+.btnCancel:disabled,
+.btnConfirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,11 +1,19 @@
 import { DocumentStatus } from '../enums/document-status.enum'
 
+export interface DocumentFileProps {
+    id: string
+    name: string
+    type: string
+    data: string
+}
+
 export interface DocumentProps {
     id: string
     titulo: string
     descricao: string | null
     status: DocumentStatus
     criadoEm: Date
+    arquivos?: DocumentFileProps[]
 }
 
 export class Document {
@@ -14,6 +22,7 @@ export class Document {
     readonly descricao: string | null
     readonly status: DocumentStatus
     readonly criadoEm: Date
+    readonly arquivos?: DocumentFileProps[]
 
     constructor(props: DocumentProps) {
         this.id = props.id
@@ -21,6 +30,7 @@ export class Document {
         this.descricao = props.descricao
         this.status = props.status
         this.criadoEm = props.criadoEm
+        this.arquivos = props.arquivos
     }
 
     /** Retorna nova instância com status ASSINADO */

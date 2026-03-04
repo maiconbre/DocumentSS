@@ -1,4 +1,4 @@
-import { Document, CreateDocumentInput, PaginatedResponse } from '../types/document'
+import { Document, CreateDocumentInput, DocumentFile, PaginatedResponse } from '../types/document'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api'
 
@@ -44,6 +44,23 @@ export const api = {
 
     deleteDocument(id: string): Promise<void> {
         return request(`/documents/${id}`, {
+            method: 'DELETE',
+        })
+    },
+
+    addFiles(documentId: string, arquivos: DocumentFile[]): Promise<Document> {
+        return request(`/documents/${documentId}/files`, {
+            method: 'POST',
+            body: JSON.stringify({ arquivos }),
+        })
+    },
+
+    getFiles(documentId: string): Promise<DocumentFile[]> {
+        return request(`/documents/${documentId}/files`)
+    },
+
+    deleteFile(documentId: string, fileId: string): Promise<void> {
+        return request(`/documents/${documentId}/files/${fileId}`, {
             method: 'DELETE',
         })
     },

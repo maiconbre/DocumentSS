@@ -6,6 +6,9 @@ import { ListDocumentsUseCase } from '../../../application/use-cases/list-docume
 import { GetDocumentUseCase } from '../../../application/use-cases/get-document.use-case'
 import { UpdateDocumentStatusUseCase } from '../../../application/use-cases/update-document-status.use-case'
 import { DeleteDocumentUseCase } from '../../../application/use-cases/delete-document.use-case'
+import { AddFilesUseCase } from '../../../application/use-cases/add-files.use-case'
+import { GetFilesUseCase } from '../../../application/use-cases/get-files.use-case'
+import { DeleteFileUseCase } from '../../../application/use-cases/delete-file.use-case'
 
 export class DocumentController {
     private readonly createUseCase: CreateDocumentUseCase
@@ -13,13 +16,19 @@ export class DocumentController {
     private readonly getUseCase: GetDocumentUseCase
     private readonly updateStatusUseCase: UpdateDocumentStatusUseCase
     private readonly deleteUseCase: DeleteDocumentUseCase
+    private readonly addFilesUseCase: AddFilesUseCase
+    private readonly getFilesUseCase: GetFilesUseCase
+    private readonly deleteFileUseCase: DeleteFileUseCase
 
-    constructor(repository: DocumentRepository) {
+    constructor(private readonly repository: DocumentRepository) {
         this.createUseCase = new CreateDocumentUseCase(repository)
         this.listUseCase = new ListDocumentsUseCase(repository)
         this.getUseCase = new GetDocumentUseCase(repository)
         this.updateStatusUseCase = new UpdateDocumentStatusUseCase(repository)
         this.deleteUseCase = new DeleteDocumentUseCase(repository)
+        this.addFilesUseCase = new AddFilesUseCase(repository)
+        this.getFilesUseCase = new GetFilesUseCase(repository)
+        this.deleteFileUseCase = new DeleteFileUseCase(repository)
     }
 
     async create(
@@ -74,6 +83,36 @@ export class DocumentController {
         reply: FastifyReply,
     ) {
         await this.deleteUseCase.execute(request.params.id)
+        return reply.status(204).send()
+    }
+
+    async addFiles(
+        request: FastifyRequest<{
+            Params: { id: string }
+            Body: { arquivos: { name: string; type: string; data: string }[] }
+        }>,
+        reply: FastifyReply,
+    ) {
+        const result = await this.addFilesUseCase.execute(
+            request.params.id,
+            request.body.arquivos,
+        )
+        return reply.status(200).send(result)
+    }
+
+    async getFiles(
+        request: FastifyRequest<{ Params: { id: string } }>,
+        reply: FastifyReply,
+    ) {
+        const files = await this.getFilesUseCase.execute(request.params.id)
+        return reply.status(200).send(files)
+    }
+
+    async deleteFile(
+        request: FastifyRequest<{ Params: { documentId: string; fileId: string } }>,
+        reply: FastifyReply,
+    ) {
+        await this.deleteFileUseCase.execute(request.params.fileId)
         return reply.status(204).send()
     }
 }
