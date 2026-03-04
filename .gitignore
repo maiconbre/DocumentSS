@@ -5,9 +5,6 @@ node_modules/
 dist/
 .next/
 
-# Environment
-.env
-.env.local
 
 # IDE
 .vscode/
