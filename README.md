@@ -52,7 +52,7 @@ docker compose up -d
 # 2. Backend
 cd backend
 npm install
-npx run prisma:migrate
+npm run prisma:migrate       # ou 'npx prisma migrate dev'
 npm run prisma:seed          # Popula com 10 documentos de exemplo
 npm run dev                  # → http://localhost:3333
 
