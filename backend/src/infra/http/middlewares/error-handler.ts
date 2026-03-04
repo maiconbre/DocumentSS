@@ -32,5 +32,3 @@ export function registerErrorHandler(app: FastifyInstance) {
         })
     })
 }
-
-

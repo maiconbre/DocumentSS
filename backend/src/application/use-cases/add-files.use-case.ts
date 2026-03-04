@@ -13,6 +13,8 @@ export class AddFilesUseCase {
         await this.repository.addFiles(documentId, arquivos)
 
         const updated = await this.repository.findById(documentId)
-        return DocumentMapper.toResponse(updated!)
+        if (!updated) throw new DocumentNotFoundError(documentId)
+        return DocumentMapper.toResponse(updated)
     }
 }
+

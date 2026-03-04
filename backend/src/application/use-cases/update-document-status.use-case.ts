@@ -15,11 +15,13 @@ export class UpdateDocumentStatusUseCase {
         }
 
         // Usa métodos de domínio para verificar estado atual
-        const entity = DocumentMapper.toDomain(existing)
+        if (existing.isPendente() && dto.status === existing.status) {
+            return DocumentMapper.toResponse(existing)
+        }
 
-        if (entity.status === dto.status) {
+        if (existing.isAssinado() && dto.status === existing.status) {
             // Já está no status desejado — retorna sem atualizar
-            return DocumentMapper.toResponse(entity)
+            return DocumentMapper.toResponse(existing)
         }
 
         const updated = await this.repository.updateStatus(id, dto.status)

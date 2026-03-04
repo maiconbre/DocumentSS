@@ -8,11 +8,12 @@ import styles from './FileUpload.module.css'
 interface FileUploadProps {
     files: DocumentFile[]
     onFilesChange: (files: DocumentFile[]) => void
+    onError?: (message: string) => void
     maxFiles?: number
     maxSizeMB?: number
 }
 
-export function FileUpload({ files, onFilesChange, maxFiles = 5, maxSizeMB = 10 }: FileUploadProps) {
+export function FileUpload({ files, onFilesChange, onError, maxFiles = 5, maxSizeMB = 10 }: FileUploadProps) {
     const inputRef = useRef<HTMLInputElement>(null)
     const [dragOver, setDragOver] = useState(false)
 
@@ -40,17 +41,17 @@ export function FileUpload({ files, onFilesChange, maxFiles = 5, maxSizeMB = 10 
 
         for (const file of Array.from(fileList)) {
             if (!acceptedTypes.includes(file.type)) {
-                alert(`Tipo não aceito: ${file.name}. Use PDF, PNG ou JPG.`)
+                onError?.(`Tipo não aceito: ${file.name}. Use PDF, PNG ou JPG.`)
                 continue
             }
 
             if (file.size > maxSizeMB * 1024 * 1024) {
-                alert(`Arquivo muito grande: ${file.name}. Máximo: ${maxSizeMB}MB.`)
+                onError?.(`Arquivo muito grande: ${file.name}. Máximo: ${maxSizeMB}MB.`)
                 continue
             }
 
             if (files.length + newFiles.length >= maxFiles) {
-                alert(`Máximo de ${maxFiles} arquivos atingido.`)
+                onError?.(`Máximo de ${maxFiles} arquivos atingido.`)
                 break
             }
 

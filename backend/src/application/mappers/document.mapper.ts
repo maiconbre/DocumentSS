@@ -2,22 +2,6 @@ import { Document } from '../../domain/entities/document.entity'
 import { DocumentStatus } from '../../domain/enums/document-status.enum'
 import { DocumentResponseDTO } from '../dtos/document-response.dto'
 
-interface DocumentFileRaw {
-    id: string
-    name: string
-    type: string
-    data: string
-}
-
-interface DocumentRaw {
-    id: string
-    titulo: string
-    descricao: string | null
-    status: DocumentStatus | string
-    criadoEm: Date
-    arquivos?: DocumentFileRaw[]
-}
-
 export class DocumentMapper {
     static toResponse(entity: Document): DocumentResponseDTO {
         return {
@@ -56,7 +40,14 @@ export class DocumentMapper {
         })
     }
 
-    static toDomainWithFiles(raw: DocumentRaw): Document {
+    static toDomainWithFiles(raw: {
+        id: string
+        titulo: string
+        descricao: string | null
+        status: DocumentStatus | string
+        criadoEm: Date
+        arquivos?: { id: string; name: string; type: string; data: string }[]
+    }): Document {
         const validStatuses = Object.values(DocumentStatus)
         const status = validStatuses.includes(raw.status as DocumentStatus)
             ? (raw.status as DocumentStatus)

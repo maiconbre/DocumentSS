@@ -96,6 +96,7 @@ export class PrismaDocumentRepository implements DocumentRepository {
             where: { documentId },
         })
         return files.map((f) => ({
+            id: f.id,
             name: f.name,
             type: f.type,
             data: f.data,

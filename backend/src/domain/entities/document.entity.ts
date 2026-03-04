@@ -33,10 +33,6 @@ export class Document {
         this.arquivos = props.arquivos
     }
 
-    /** Retorna nova instância com status ASSINADO */
-    assinar(): Document {
-        return new Document({ ...this, status: DocumentStatus.ASSINADO })
-    }
 
     isPendente(): boolean {
         return this.status === DocumentStatus.PENDENTE

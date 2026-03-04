@@ -54,7 +54,6 @@ export function useDocuments() {
         setIsSubmitting(true)
         try {
             await api.addFiles(doc.id, [{
-                id: crypto.randomUUID(),
                 name: 'assinatura.png',
                 type: 'image/png',
                 data: signatureData,

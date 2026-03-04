@@ -2,7 +2,7 @@
 
 import { Document } from '../../../types/document'
 import { Modal } from '../../ui/Modal/Modal'
-import { Clock, CheckCircle2, FileText, Image, PenLine, Download, Trash2, PenLine as SignIcon, Undo2 } from 'lucide-react'
+import { Clock, CheckCircle2, FileText, Image, PenLine, Download, Trash2, Undo2 } from 'lucide-react'
 import styles from './DocumentViewer.module.css'
 
 interface DocumentViewerProps {
@@ -110,7 +110,7 @@ export function DocumentViewer({ doc, isOpen, onClose, onSign, onDelete }: Docum
                         onClick={onSign}
                     >
                         {doc.status === 'PENDENTE'
-                            ? <><SignIcon size={14} /> Assinar</>
+                            ? <><PenLine size={14} /> Assinar</>
                             : <><Undo2 size={14} /> Desfazer</>
                         }
                     </button>

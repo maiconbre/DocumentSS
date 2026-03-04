@@ -27,9 +27,7 @@ export function ConfirmModal({
     variant = 'danger',
     isLoading = false,
 }: ConfirmModalProps) {
-    function handleConfirm() {
-        onConfirm()
-    }
+
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
@@ -47,7 +45,7 @@ export function ConfirmModal({
                     </button>
                     <button
                         className={`${styles.btnConfirm} ${styles[variant]}`}
-                        onClick={handleConfirm}
+                        onClick={onConfirm}
                         disabled={isLoading}
                     >
                         {isLoading

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { DocumentFile } from '../types/document'
+import { Document, DocumentFile } from '../types/document'
 import { useDocuments } from '../hooks/useDocuments'
 import { useModal } from '../hooks/useModal'
 import { useToast } from '../hooks/useToast'
@@ -9,7 +9,6 @@ import { AppLayout } from '../components/layout'
 import { DocumentForm, DocumentList, DocumentViewer, FileUpload, SignatureModal } from '../components/documents'
 import { Modal, ConfirmModal, ToastContainer } from '../components/ui'
 import { Loader2 } from 'lucide-react'
-import { Document } from '../types/document'
 import styles from './page.module.css'
 
 export default function Home() {
@@ -122,7 +121,11 @@ export default function Home() {
                     <div className={styles.formContent}>
                         <DocumentForm onSubmit={handleCreate} />
                         <div className={styles.uploadSection}>
-                            <FileUpload files={newFiles} onFilesChange={setNewFiles} />
+                            <FileUpload
+                                files={newFiles}
+                                onFilesChange={setNewFiles}
+                                onError={(msg: string) => toast.show(msg, 'error')}
+                            />
                         </div>
                         <div className={styles.formActions}>
                             <button className={styles.btnSecondary} onClick={closeCreateForm}>

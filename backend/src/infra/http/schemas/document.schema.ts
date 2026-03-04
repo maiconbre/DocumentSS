@@ -192,6 +192,7 @@ export const getFilesSchema = {
             items: {
                 type: 'object',
                 properties: {
+                    id: { type: 'string', format: 'uuid' },
                     name: { type: 'string' },
                     type: { type: 'string' },
                     data: { type: 'string' },

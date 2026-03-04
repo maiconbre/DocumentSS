@@ -5,6 +5,9 @@ export interface DocumentFile {
     data: string
 }
 
+/** Payload para criação de arquivos — sem `id` (gerado pelo backend) */
+export type DocumentFileInput = Omit<DocumentFile, 'id'>
+
 export interface Document {
     id: string
     titulo: string
