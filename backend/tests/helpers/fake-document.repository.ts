@@ -1,12 +1,12 @@
-import { Document } from '../../src/domain/entities/document.entity'
-import { DocumentStatus } from '../../src/domain/enums/document-status.enum'
+import { Document } from '@domain/entities/document.entity'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 import {
     DocumentRepository,
     CreateDocumentData,
     CreateFileData,
     FindAllParams,
     PaginatedResult,
-} from '../../src/domain/repositories/document.repository'
+} from '@domain/repositories/document.repository'
 import { randomUUID } from 'crypto'
 
 interface StoredFile extends CreateFileData {
@@ -102,10 +102,10 @@ export class FakeDocumentRepository implements DocumentRepository {
         }
     }
 
-    async getFiles(documentId: string): Promise<CreateFileData[]> {
+    async getFiles(documentId: string): Promise<any[]> {
         return this.files
             .filter((f) => f.documentId === documentId)
-            .map(({ name, type, data }) => ({ name, type, data }))
+            .map(({ id, name, type, data }) => ({ id, name, type, data }))
     }
 
     async deleteFile(fileId: string): Promise<void> {

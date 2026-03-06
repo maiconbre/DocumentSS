@@ -1,5 +1,6 @@
-import { DocumentRepository } from '../../domain/repositories/document.repository'
-import { DocumentNotFoundError } from '../../domain/errors/document-not-found.error'
+import { DocumentRepository } from '@domain/repositories/document.repository'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
+import { DocumentCannotBeDeletedError } from '@domain/errors/document-cannot-be-deleted.error'
 
 export class DeleteDocumentUseCase {
     constructor(private readonly repository: DocumentRepository) { }
@@ -11,6 +12,11 @@ export class DeleteDocumentUseCase {
             throw new DocumentNotFoundError(id)
         }
 
+        if (existing.status === 'ASSINADO') {
+            throw new DocumentCannotBeDeletedError()
+        }
+
         await this.repository.delete(id)
     }
 }
+

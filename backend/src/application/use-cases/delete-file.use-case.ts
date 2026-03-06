@@ -1,4 +1,4 @@
-import { DocumentRepository } from '../../domain/repositories/document.repository'
+import { DocumentRepository } from '@domain/repositories/document.repository'
 
 export class DeleteFileUseCase {
     constructor(private readonly repository: DocumentRepository) { }

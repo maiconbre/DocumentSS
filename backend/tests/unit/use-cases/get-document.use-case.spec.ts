@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { GetDocumentUseCase } from '../../../src/application/use-cases/get-document.use-case'
+import { GetDocumentUseCase } from '@application/use-cases/get-document.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
-import { DocumentNotFoundError } from '../../../src/domain/errors/document-not-found.error'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 
 describe('GetDocumentUseCase', () => {
     let repository: FakeDocumentRepository

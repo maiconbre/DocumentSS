@@ -1,0 +1,36 @@
+const fs = require('fs');
+const path = require('path');
+
+function walk(dir) {
+    let results = [];
+    const list = fs.readdirSync(dir);
+    list.forEach(file => {
+        file = path.join(dir, file);
+        const stat = fs.statSync(file);
+        if (stat && stat.isDirectory()) {
+            results = results.concat(walk(file));
+        } else if (file.endsWith('.ts')) {
+            results.push(file);
+        }
+    });
+    return results;
+}
+
+const files = [...walk('./src'), ...walk('./tests')];
+let changed = 0;
+
+files.forEach(file => {
+    let content = fs.readFileSync(file, 'utf8');
+    const original = content;
+
+    content = content.replace(/from\s+['"](?:\.\.\/)+(?:src\/)?(domain|application|infra)\/(.*?)['"]/g, "from '@$1/$2'");
+    content = content.replace(/import\s+['"](?:\.\.\/)+(?:src\/)?(domain|application|infra)\/(.*?)['"]/g, "import '@$1/$2'");
+
+    if (content !== original) {
+        fs.writeFileSync(file, content, 'utf8');
+        changed++;
+        console.log(`Updated ${file}`);
+    }
+});
+
+console.log(`Changed ${changed} files`);

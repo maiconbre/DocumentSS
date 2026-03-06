@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DocumentStatus } from '../../domain/enums/document-status.enum'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 // ==================== REQUEST/INPUT Schemas ====================
 

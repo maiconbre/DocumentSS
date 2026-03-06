@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { ListDocumentsUseCase } from '../../../src/application/use-cases/list-documents.use-case'
+import { ListDocumentsUseCase } from '@application/use-cases/list-documents.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
-import { DocumentStatus } from '../../../src/domain/enums/document-status.enum'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 describe('ListDocumentsUseCase', () => {
     let repository: FakeDocumentRepository

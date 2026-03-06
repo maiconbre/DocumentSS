@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import Fastify, { FastifyInstance } from 'fastify'
 import { PrismaClient } from '@prisma/client'
-import { registerErrorHandler } from '../../src/infra/http/middlewares/error-handler'
-import { registerDocumentRoutes } from '../../src/infra/http/routes/document.routes'
-import { PrismaDocumentRepository } from '../../src/infra/repositories/prisma-document.repository'
+import { registerErrorHandler } from '@infra/http/middlewares/error-handler'
+import { registerDocumentRoutes } from '@infra/http/routes/document.routes'
+import { PrismaDocumentRepository } from '@infra/repositories/prisma-document.repository'
 
 /**
  * Teste E2E — usa banco PostgreSQL real.
@@ -25,6 +25,11 @@ describe('Document Routes (E2E - Banco Real)', () => {
         const repository = new PrismaDocumentRepository(prisma)
 
         app = Fastify({ logger: false })
+
+        const { validatorCompiler, serializerCompiler } = await import('fastify-type-provider-zod');
+        app.setValidatorCompiler(validatorCompiler)
+        app.setSerializerCompiler(serializerCompiler)
+
         registerErrorHandler(app)
 
         await app.register(async (instance) => {
@@ -79,7 +84,20 @@ describe('Document Routes (E2E - Banco Real)', () => {
         const listBody = listRes.json()
         expect(listBody.data.length).toBeGreaterThanOrEqual(1)
 
-        // 5. Deletar
+        // 5. Deletar ASSINADO deve falhar (Regra de Negócio)
+        const deleteBlockRes = await app.inject({
+            method: 'DELETE',
+            url: `/api/documents/${doc.id}`,
+        })
+        expect(deleteBlockRes.statusCode).toBe(400)
+
+        // 6. Reverter para PENDENTE e deletar com sucesso
+        await app.inject({
+            method: 'PATCH',
+            url: `/api/documents/${doc.id}/status`,
+            payload: { status: 'PENDENTE' },
+        })
+
         const deleteRes = await app.inject({
             method: 'DELETE',
             url: `/api/documents/${doc.id}`,

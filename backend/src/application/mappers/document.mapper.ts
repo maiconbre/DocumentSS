@@ -1,5 +1,5 @@
-import { Document } from '../../domain/entities/document.entity'
-import { DocumentStatus } from '../../domain/enums/document-status.enum'
+import { Document } from '@domain/entities/document.entity'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 import { DocumentResponseDTO } from '../dtos/validation.schema'
 
 export class DocumentMapper {

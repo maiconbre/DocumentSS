@@ -1,33 +1,25 @@
 import { FastifyInstance, FastifyError } from 'fastify'
-import { DocumentNotFoundError } from '../../../domain/errors/document-not-found.error'
+import { hasZodFastifySchemaValidationErrors } from 'fastify-type-provider-zod'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 import {
-    ValidationError,
     InvalidDocumentStatusError,
     MissingParamError,
-} from '../../../domain/errors/validation.error'
-
-interface ErrorResponse {
-    statusCode: number
-    error: string
-    message: string
-    issues?: Array<{
-        path: (string | number)[]
-        message: string
-        code: string
-    }>
-}
+} from '@domain/errors/validation.error'
 
 export function registerErrorHandler(app: FastifyInstance) {
     app.setErrorHandler((error: Error | FastifyError, request, reply) => {
-        // Erro de validação Zod
-        if (error instanceof ValidationError) {
-            const response: ErrorResponse = {
+        // Erro de validação Zod via Provider Nativo Fastify
+        if (hasZodFastifySchemaValidationErrors(error)) {
+            return reply.status(400).send({
                 statusCode: 400,
                 error: 'Validation Failed',
-                message: error.getFormattedMessage(),
-                issues: error.issues,
-            }
-            return reply.status(400).send(response)
+                message: 'Parâmetros inválidos ou tipos incorretos',
+                issues: error.validation.map(v => ({
+                    path: v.instancePath,
+                    message: v.message,
+                    code: v.params?.issueCode || 'invalid_type'
+                })),
+            })
         }
 
         // Erro de status inválido
@@ -48,23 +40,21 @@ export function registerErrorHandler(app: FastifyInstance) {
             })
         }
 
+        // Erro de regra de negócio
+        if (error.name === 'DocumentCannotBeDeletedError') {
+            return reply.status(400).send({
+                statusCode: 400,
+                error: 'Bad Request',
+                message: error.message,
+            })
+        }
+
         // Erro de domínio — documento não encontrado
         if (error instanceof DocumentNotFoundError || error.name === 'DocumentNotFoundError') {
             return reply.status(404).send({
                 statusCode: 404,
                 error: 'Not Found',
                 message: error.message,
-            })
-        }
-
-        // Erro de validação do Fastify (JSON Schema)
-        const fastifyError = error as FastifyError
-        if (fastifyError.validation) {
-            return reply.status(400).send({
-                statusCode: 400,
-                error: 'Bad Request',
-                message: fastifyError.message,
-                issues: fastifyError.validation,
             })
         }
 

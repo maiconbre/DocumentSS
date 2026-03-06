@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { UpdateDocumentStatusUseCase } from '../../../src/application/use-cases/update-document-status.use-case'
+import { UpdateDocumentStatusUseCase } from '@application/use-cases/update-document-status.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
-import { DocumentNotFoundError } from '../../../src/domain/errors/document-not-found.error'
-import { DocumentStatus } from '../../../src/domain/enums/document-status.enum'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 describe('UpdateDocumentStatusUseCase', () => {
     let repository: FakeDocumentRepository

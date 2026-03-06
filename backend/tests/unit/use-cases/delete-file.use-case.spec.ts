@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { DeleteFileUseCase } from '../../../src/application/use-cases/delete-file.use-case'
+import { DeleteFileUseCase } from '@application/use-cases/delete-file.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
 
 describe('DeleteFileUseCase', () => {

@@ -75,11 +75,12 @@ export function useDocuments() {
         try {
             await api.deleteDocument(id)
             await fetchDocuments(currentPage)
-            return true
-        } catch (err) {
-            setError('Erro ao excluir documento')
+            return { success: true }
+        } catch (err: any) {
+            const errorMessage = err?.message || 'Erro ao excluir documento'
+            setError(errorMessage)
             console.error(err)
-            return false
+            return { success: false, error: errorMessage }
         } finally {
             setIsSubmitting(false)
         }

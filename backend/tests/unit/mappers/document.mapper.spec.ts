@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { DocumentMapper } from '../../../src/application/mappers/document.mapper'
-import { Document } from '../../../src/domain/entities/document.entity'
-import { DocumentStatus } from '../../../src/domain/enums/document-status.enum'
+import { DocumentMapper } from '@application/mappers/document.mapper'
+import { Document } from '@domain/entities/document.entity'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 describe('DocumentMapper', () => {
     const sampleDate = new Date('2026-03-03T20:00:00.000Z')

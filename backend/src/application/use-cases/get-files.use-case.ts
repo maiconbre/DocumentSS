@@ -1,5 +1,5 @@
-import { DocumentRepository } from '../../domain/repositories/document.repository'
-import { DocumentNotFoundError } from '../../domain/errors/document-not-found.error'
+import { DocumentRepository } from '@domain/repositories/document.repository'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 import { DocumentFileDTO } from '../dtos/validation.schema'
 
 export class GetFilesUseCase {

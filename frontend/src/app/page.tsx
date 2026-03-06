@@ -68,12 +68,12 @@ export default function Home() {
 
     async function handleConfirmDelete() {
         if (!deleteModal.data) return
-        const success = await deleteDocument(deleteModal.data.id)
+        const result = await deleteDocument(deleteModal.data.id)
         deleteModal.close()
-        if (success) {
+        if (result.success) {
             toast.show('Documento excluído com sucesso!', 'success')
         } else {
-            toast.show('Erro ao excluir documento', 'error')
+            toast.show(result.error || 'Erro ao excluir documento', 'error')
         }
     }
 

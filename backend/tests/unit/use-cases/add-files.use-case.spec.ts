@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { AddFilesUseCase } from '../../../src/application/use-cases/add-files.use-case'
+import { AddFilesUseCase } from '@application/use-cases/add-files.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
-import { DocumentNotFoundError } from '../../../src/domain/errors/document-not-found.error'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 
 describe('AddFilesUseCase', () => {
     let repository: FakeDocumentRepository

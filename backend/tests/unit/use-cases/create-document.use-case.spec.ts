@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { CreateDocumentUseCase } from '../../../src/application/use-cases/create-document.use-case'
+import { CreateDocumentUseCase } from '@application/use-cases/create-document.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
 
 describe('CreateDocumentUseCase', () => {

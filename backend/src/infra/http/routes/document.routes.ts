@@ -1,73 +1,137 @@
 import { FastifyInstance } from 'fastify'
+import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 import { DocumentController } from '../controllers/document.controller'
-import { DocumentRepository } from '../../../domain/repositories/document.repository'
+import { DocumentRepository } from '@domain/repositories/document.repository'
 import { PrismaDocumentRepository } from '../../repositories/prisma-document.repository'
 import { prisma } from '../../database/prisma-client'
-import { DocumentStatus } from '../../../domain/enums/document-status.enum'
 import {
-    createDocumentSchema,
-    getDocumentSchema,
-    updateDocumentStatusSchema,
-    deleteDocumentSchema,
-    listDocumentsSchema,
-    addFilesSchema,
-    getFilesSchema,
-    deleteFileSchema,
-} from '../schemas/document.schema'
-
-interface AddFilesBody {
-    arquivos: { name: string; type: string; data: string }[]
-}
+    CreateDocumentRequestSchema,
+    UpdateDocumentStatusRequestSchema,
+    AddFilesRequestSchema,
+    ListDocumentsQuerySchema,
+    DocumentIdParamSchema,
+    DocumentResponseSchema,
+    DocumentListResponseSchema,
+    DocumentFileResponseSchema
+} from '@application/dtos/validation.schema'
 
 export function registerDocumentRoutes(app: FastifyInstance, repository: DocumentRepository) {
     const controller = new DocumentController(repository)
+    const typedApp = app.withTypeProvider<ZodTypeProvider>()
 
-    app.post<{ Body: { titulo: string; descricao?: string } }>(
+    typedApp.post(
         '/documents',
-        { schema: createDocumentSchema },
-        (request, reply) => controller.create(request, reply),
+        {
+            schema: {
+                tags: ['Documents'],
+                summary: 'Criar documento',
+                description: 'Cria um novo documento com status PENDENTE',
+                body: CreateDocumentRequestSchema,
+                response: { 201: DocumentResponseSchema },
+            },
+        },
+        async (request, reply) => controller.create(request as any, reply as any),
     )
 
-    app.get<{ Querystring: { page?: number; limit?: number; status?: string } }>(
+    typedApp.get(
         '/documents',
-        { schema: listDocumentsSchema },
-        (request, reply) => controller.list(request, reply),
+        {
+            schema: {
+                tags: ['Documents'],
+                summary: 'Listar documentos',
+                description: 'Lista documentos com paginação e filtro por status',
+                querystring: ListDocumentsQuerySchema,
+                response: { 200: DocumentListResponseSchema },
+            },
+        },
+        async (request, reply) => controller.list(request as any, reply as any),
     )
 
-    app.get<{ Params: { id: string } }>(
+    typedApp.get(
         '/documents/:id',
-        { schema: getDocumentSchema },
-        (request, reply) => controller.getById(request, reply),
+        {
+            schema: {
+                tags: ['Documents'],
+                summary: 'Buscar documento por ID',
+                params: DocumentIdParamSchema,
+                response: { 200: DocumentResponseSchema },
+            },
+        },
+        async (request, reply) => controller.getById(request as any, reply as any),
     )
 
-    app.patch<{ Params: { id: string }; Body: { status: DocumentStatus } }>(
+    typedApp.patch(
         '/documents/:id/status',
-        { schema: updateDocumentStatusSchema },
-        (request, reply) => controller.updateStatus(request, reply),
+        {
+            schema: {
+                tags: ['Documents'],
+                summary: 'Atualizar status do documento',
+                description: 'Atualiza o status de um documento (PENDENTE ↔ ASSINADO)',
+                params: DocumentIdParamSchema,
+                body: UpdateDocumentStatusRequestSchema,
+                response: { 200: DocumentResponseSchema },
+            },
+        },
+        async (request, reply) => controller.updateStatus(request as any, reply as any),
     )
 
-    app.delete<{ Params: { id: string } }>(
+    typedApp.delete(
         '/documents/:id',
-        { schema: deleteDocumentSchema },
-        (request, reply) => controller.delete(request, reply),
+        {
+            schema: {
+                tags: ['Documents'],
+                summary: 'Deletar documento',
+                params: DocumentIdParamSchema,
+                response: { 204: z.null() },
+            },
+        },
+        async (request, reply) => controller.delete(request as any, reply as any),
     )
 
-    app.post<{ Params: { id: string }; Body: AddFilesBody }>(
+    typedApp.post(
         '/documents/:id/files',
-        { schema: addFilesSchema },
-        (request, reply) => controller.addFiles(request, reply),
+        {
+            schema: {
+                tags: ['Files'],
+                summary: 'Adicionar arquivos ao documento',
+                description: 'Adiciona um ou mais arquivos (Base64) a um documento existente',
+                params: DocumentIdParamSchema,
+                body: AddFilesRequestSchema,
+                response: { 200: DocumentResponseSchema },
+            },
+        },
+        async (request, reply) => controller.addFiles(request as any, reply as any),
     )
 
-    app.get<{ Params: { id: string } }>(
+    typedApp.get(
         '/documents/:id/files',
-        { schema: getFilesSchema },
-        (request, reply) => controller.getFiles(request, reply),
+        {
+            schema: {
+                tags: ['Files'],
+                summary: 'Listar arquivos do documento',
+                description: 'Retorna todos os arquivos vinculados a um documento',
+                params: DocumentIdParamSchema,
+                response: { 200: z.array(DocumentFileResponseSchema) },
+            },
+        },
+        async (request, reply) => controller.getFiles(request as any, reply as any),
     )
 
-    app.delete<{ Params: { documentId: string; fileId: string } }>(
-        '/documents/:documentId/files/:fileId',
-        { schema: deleteFileSchema },
-        (request, reply) => controller.deleteFile(request, reply),
+    typedApp.delete(
+        '/documents/:id/files/:fileId',
+        {
+            schema: {
+                tags: ['Files'],
+                summary: 'Deletar arquivo',
+                description: 'Remove um arquivo específico de um documento',
+                params: DocumentIdParamSchema.extend({
+                    fileId: z.string().uuid('ID deve ser um UUID válido'),
+                }),
+                response: { 204: z.null() },
+            },
+        },
+        async (request, reply) => controller.deleteFile(request as any, reply as any),
     )
 }
 

@@ -1,4 +1,4 @@
-import { DocumentRepository } from '../../domain/repositories/document.repository'
+import { DocumentRepository } from '@domain/repositories/document.repository'
 import { CreateDocumentDTO, DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 
@@ -8,7 +8,7 @@ export class CreateDocumentUseCase {
     async execute(dto: CreateDocumentDTO): Promise<DocumentResponseDTO> {
         const document = await this.repository.create({
             titulo: dto.titulo,
-            descricao: dto.descricao,
+            descricao: dto.descricao ?? undefined,
         })
 
         return DocumentMapper.toResponse(document)

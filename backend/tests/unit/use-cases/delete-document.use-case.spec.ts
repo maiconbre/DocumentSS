@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { DeleteDocumentUseCase } from '../../../src/application/use-cases/delete-document.use-case'
+import { DeleteDocumentUseCase } from '@application/use-cases/delete-document.use-case'
 import { FakeDocumentRepository } from '../../helpers/fake-document.repository'
-import { DocumentNotFoundError } from '../../../src/domain/errors/document-not-found.error'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 
 describe('DeleteDocumentUseCase', () => {
     let repository: FakeDocumentRepository
@@ -25,5 +25,14 @@ describe('DeleteDocumentUseCase', () => {
         await expect(
             useCase.execute('id-inexistente'),
         ).rejects.toThrow(DocumentNotFoundError)
+    })
+
+    it('deve bloquear a exclusão de um documento ASSINADO', async () => {
+        const doc = await repository.create({ titulo: 'Documento assinado' })
+        await repository.updateStatus(doc.id, 'ASSINADO' as any)
+
+        await expect(
+            useCase.execute(doc.id)
+        ).rejects.toThrow('Documentos com status ASSINADO não podem ser deletados')
     })
 })

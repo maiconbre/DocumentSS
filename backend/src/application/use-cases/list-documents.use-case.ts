@@ -1,4 +1,4 @@
-import { DocumentRepository, FindAllParams } from '../../domain/repositories/document.repository'
+import { DocumentRepository, FindAllParams } from '@domain/repositories/document.repository'
 import { DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 

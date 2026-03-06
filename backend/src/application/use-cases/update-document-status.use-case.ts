@@ -1,5 +1,5 @@
-import { DocumentRepository } from '../../domain/repositories/document.repository'
-import { DocumentNotFoundError } from '../../domain/errors/document-not-found.error'
+import { DocumentRepository } from '@domain/repositories/document.repository'
+import { DocumentNotFoundError } from '@domain/errors/document-not-found.error'
 import { UpdateDocumentStatusDTO, DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 

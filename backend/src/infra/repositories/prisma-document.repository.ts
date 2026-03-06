@@ -1,14 +1,14 @@
 import { PrismaClient } from '@prisma/client'
-import { Document } from '../../domain/entities/document.entity'
-import { DocumentStatus } from '../../domain/enums/document-status.enum'
+import { Document } from '@domain/entities/document.entity'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 import {
     DocumentRepository,
     CreateDocumentData,
     CreateFileData,
     FindAllParams,
     PaginatedResult,
-} from '../../domain/repositories/document.repository'
-import { DocumentMapper } from '../../application/mappers/document.mapper'
+} from '@domain/repositories/document.repository'
+import { DocumentMapper } from '@application/mappers/document.mapper'
 
 export class PrismaDocumentRepository implements DocumentRepository {
     constructor(private readonly prisma: PrismaClient) { }

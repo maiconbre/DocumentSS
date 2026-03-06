@@ -5,9 +5,9 @@ import {
     AddFilesRequestSchema,
     ListDocumentsQuerySchema,
     DocumentIdParamSchema,
-} from '../../../src/application/dtos/validation.schema'
-import { ValidationError } from '../../../src/domain/errors/validation.error'
-import { DocumentStatus } from '../../../src/domain/enums/document-status.enum'
+} from '@application/dtos/validation.schema'
+import { ValidationError } from '@domain/errors/validation.error'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 describe('Validation Schemas', () => {
     describe('CreateDocumentRequestSchema', () => {

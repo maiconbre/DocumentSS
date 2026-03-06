@@ -1,23 +1,14 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { DocumentRepository } from '../../../domain/repositories/document.repository'
-import { DocumentStatus } from '../../../domain/enums/document-status.enum'
-import { CreateDocumentUseCase } from '../../../application/use-cases/create-document.use-case'
-import { ListDocumentsUseCase } from '../../../application/use-cases/list-documents.use-case'
-import { GetDocumentUseCase } from '../../../application/use-cases/get-document.use-case'
-import { UpdateDocumentStatusUseCase } from '../../../application/use-cases/update-document-status.use-case'
-import { DeleteDocumentUseCase } from '../../../application/use-cases/delete-document.use-case'
-import { AddFilesUseCase } from '../../../application/use-cases/add-files.use-case'
-import { GetFilesUseCase } from '../../../application/use-cases/get-files.use-case'
-import { DeleteFileUseCase } from '../../../application/use-cases/delete-file.use-case'
-import {
-    CreateDocumentRequestSchema,
-    UpdateDocumentStatusRequestSchema,
-    AddFilesRequestSchema,
-    ListDocumentsQuerySchema,
-    DocumentIdParamSchema,
-} from '../../../application/dtos/validation.schema'
-import { validateOrThrow } from '../../../application/validators/validate'
-import { InvalidDocumentStatusError, MissingParamError } from '../../../domain/errors/validation.error'
+import { DocumentRepository } from '@domain/repositories/document.repository'
+import { DocumentStatus } from '@domain/enums/document-status.enum'
+import { CreateDocumentUseCase } from '@application/use-cases/create-document.use-case'
+import { ListDocumentsUseCase } from '@application/use-cases/list-documents.use-case'
+import { GetDocumentUseCase } from '@application/use-cases/get-document.use-case'
+import { UpdateDocumentStatusUseCase } from '@application/use-cases/update-document-status.use-case'
+import { DeleteDocumentUseCase } from '@application/use-cases/delete-document.use-case'
+import { AddFilesUseCase } from '@application/use-cases/add-files.use-case'
+import { GetFilesUseCase } from '@application/use-cases/get-files.use-case'
+import { DeleteFileUseCase } from '@application/use-cases/delete-file.use-case'
 
 export class DocumentController {
     private readonly createUseCase: CreateDocumentUseCase
@@ -40,118 +31,54 @@ export class DocumentController {
         this.deleteFileUseCase = new DeleteFileUseCase(repository)
     }
 
-    async create(
-        request: FastifyRequest<{ Body: { titulo: string; descricao?: string } }>,
-        reply: FastifyReply,
-    ) {
-        const validatedData = validateOrThrow(
-            CreateDocumentRequestSchema,
-            request.body,
-        )
-
-        const result = await this.createUseCase.execute(validatedData)
+    async create(request: any, reply: FastifyReply) {
+        const result = await this.createUseCase.execute(request.body)
         return reply.status(201).send(result)
     }
 
-    async list(
-        request: FastifyRequest<{
-            Querystring: { page?: number; limit?: number; status?: string }
-        }>,
-        reply: FastifyReply,
-    ) {
-        const validatedQuery = validateOrThrow(
-            ListDocumentsQuerySchema,
-            request.query,
-        )
-
+    async list(request: any, reply: FastifyReply) {
         const result = await this.listUseCase.execute({
-            page: validatedQuery.page,
-            limit: validatedQuery.limit,
-            status: validatedQuery.status as DocumentStatus | undefined,
+            page: request.query.page,
+            limit: request.query.limit,
+            status: request.query.status as DocumentStatus | undefined,
         })
 
         return reply.status(200).send(result)
     }
 
-    async getById(
-        request: FastifyRequest<{ Params: { id: string } }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
-
-        const result = await this.getUseCase.execute(validatedParams.id)
+    async getById(request: any, reply: FastifyReply) {
+        const result = await this.getUseCase.execute(request.params.id)
         return reply.status(200).send(result)
     }
 
-    async updateStatus(
-        request: FastifyRequest<{
-            Params: { id: string }
-            Body: { status: DocumentStatus }
-        }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
-        const validatedBody = validateOrThrow(
-            UpdateDocumentStatusRequestSchema,
+    async updateStatus(request: any, reply: FastifyReply) {
+        const result = await this.updateStatusUseCase.execute(
+            request.params.id,
             request.body,
         )
-
-        const result = await this.updateStatusUseCase.execute(
-            validatedParams.id,
-            validatedBody,
-        )
         return reply.status(200).send(result)
     }
 
-    async delete(
-        request: FastifyRequest<{ Params: { id: string } }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
-
-        await this.deleteUseCase.execute(validatedParams.id)
+    async delete(request: any, reply: FastifyReply) {
+        await this.deleteUseCase.execute(request.params.id)
         return reply.status(204).send()
     }
 
-    async addFiles(
-        request: FastifyRequest<{
-            Params: { id: string }
-            Body: { arquivos: { name: string; type: string; data: string }[] }
-        }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
-        const validatedBody = validateOrThrow(AddFilesRequestSchema, request.body)
-
+    async addFiles(request: any, reply: FastifyReply) {
         const result = await this.addFilesUseCase.execute(
-            validatedParams.id,
-            validatedBody.arquivos,
+            request.params.id,
+            request.body.arquivos,
         )
         return reply.status(200).send(result)
     }
 
-    async getFiles(
-        request: FastifyRequest<{ Params: { id: string } }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
-
-        const files = await this.getFilesUseCase.execute(validatedParams.id)
+    async getFiles(request: any, reply: FastifyReply) {
+        const files = await this.getFilesUseCase.execute(request.params.id)
         return reply.status(200).send(files)
     }
 
-    async deleteFile(
-        request: FastifyRequest<{ Params: { documentId: string; fileId: string } }>,
-        reply: FastifyReply,
-    ) {
-        const validatedParams = validateOrThrow(
-            DocumentIdParamSchema.pick({ id: true }).extend({
-                fileId: DocumentIdParamSchema.shape.id,
-            }),
-            { id: request.params.documentId, fileId: request.params.fileId },
-        )
-
-        await this.deleteFileUseCase.execute(validatedParams.fileId)
+    async deleteFile(request: any, reply: FastifyReply) {
+        await this.deleteFileUseCase.execute(request.params.fileId)
         return reply.status(204).send()
     }
 }
