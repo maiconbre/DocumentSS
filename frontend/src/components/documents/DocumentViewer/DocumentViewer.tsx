@@ -2,7 +2,7 @@
 
 import { Document } from '../../../types/document'
 import { Modal } from '../../ui/Modal/Modal'
-import { Clock, CheckCircle2, FileText, Image, PenLine, Download, Trash2, Undo2 } from 'lucide-react'
+import { Clock, CheckCircle2, FileText, Image as ImageIcon, PenLine, Download, Trash2, Undo2 } from 'lucide-react'
 import styles from './DocumentViewer.module.css'
 
 interface DocumentViewerProps {
@@ -18,7 +18,7 @@ export function DocumentViewer({ doc, isOpen, onClose, onSign, onDelete }: Docum
 
     function getFileIcon(type: string) {
         if (type === 'application/pdf') return <FileText size={16} color="#ef4444" />
-        if (type.startsWith('image/')) return <Image size={16} color="#6366f1" />
+        if (type.startsWith('image/')) return <ImageIcon size={16} color="#6366f1" />
         return <FileText size={16} color="#6b7280" />
     }
 
@@ -75,6 +75,7 @@ export function DocumentViewer({ doc, isOpen, onClose, onSign, onDelete }: Docum
                                             {isSignature(file.name) && (
                                                 <span className={styles.signatureLabel}><PenLine size={12} /> Assinatura</span>
                                             )}
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={file.data} alt={file.name} />
                                         </div>
                                     ) : (

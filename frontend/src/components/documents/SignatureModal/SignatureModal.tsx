@@ -29,7 +29,7 @@ export function SignatureModal({ isOpen, onClose, onConfirm, isLoading = false }
                 ctx.lineCap = 'round'
                 ctx.lineJoin = 'round'
             }
-            setHasSignature(false)
+            setTimeout(() => setHasSignature(false), 0)
         }
     }, [isOpen])
 

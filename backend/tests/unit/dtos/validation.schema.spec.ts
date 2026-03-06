@@ -6,7 +6,6 @@ import {
     ListDocumentsQuerySchema,
     DocumentIdParamSchema,
 } from '@application/dtos/validation.schema'
-import { ValidationError } from '@domain/errors/validation.error'
 import { DocumentStatus } from '@domain/enums/document-status.enum'
 
 describe('Validation Schemas', () => {

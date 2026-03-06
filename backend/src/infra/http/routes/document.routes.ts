@@ -31,7 +31,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 201: DocumentResponseSchema },
             },
         },
-        async (request, reply) => controller.create(request as any, reply as any),
+        async (request, reply) => controller.create(request.body, reply),
     )
 
     typedApp.get(
@@ -45,7 +45,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 200: DocumentListResponseSchema },
             },
         },
-        async (request, reply) => controller.list(request as any, reply as any),
+        async (request, reply) => controller.list(request.query, reply),
     )
 
     typedApp.get(
@@ -58,7 +58,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 200: DocumentResponseSchema },
             },
         },
-        async (request, reply) => controller.getById(request as any, reply as any),
+        async (request, reply) => controller.getById(request.params, reply),
     )
 
     typedApp.patch(
@@ -73,7 +73,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 200: DocumentResponseSchema },
             },
         },
-        async (request, reply) => controller.updateStatus(request as any, reply as any),
+        async (request, reply) => controller.updateStatus(request.params, request.body, reply),
     )
 
     typedApp.delete(
@@ -86,7 +86,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 204: z.null() },
             },
         },
-        async (request, reply) => controller.delete(request as any, reply as any),
+        async (request, reply) => controller.delete(request.params, reply),
     )
 
     typedApp.post(
@@ -101,7 +101,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 200: DocumentResponseSchema },
             },
         },
-        async (request, reply) => controller.addFiles(request as any, reply as any),
+        async (request, reply) => controller.addFiles(request.params, request.body, reply),
     )
 
     typedApp.get(
@@ -115,7 +115,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 200: z.array(DocumentFileResponseSchema) },
             },
         },
-        async (request, reply) => controller.getFiles(request as any, reply as any),
+        async (request, reply) => controller.getFiles(request.params, reply),
     )
 
     typedApp.delete(
@@ -131,7 +131,7 @@ export function registerDocumentRoutes(app: FastifyInstance, repository: Documen
                 response: { 204: z.null() },
             },
         },
-        async (request, reply) => controller.deleteFile(request as any, reply as any),
+        async (request, reply) => controller.deleteFile(request.params, reply),
     )
 }
 

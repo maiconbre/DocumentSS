@@ -1,4 +1,4 @@
-import { Document, CreateDocumentInput, DocumentFile, DocumentFileInput, PaginatedResponse } from '../types/document'
+import { Document, CreateDocumentInput, DocumentFileInput, PaginatedResponse } from '../types/document'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api'
 

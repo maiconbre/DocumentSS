@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { DocumentFile } from '../../../types/document'
-import { Paperclip, FileText, Image, X } from 'lucide-react'
+import { Paperclip, FileText, Image as ImageIcon, X } from 'lucide-react'
 import styles from './FileUpload.module.css'
 
 interface FileUploadProps {
@@ -26,14 +26,8 @@ export function FileUpload({ files, onFilesChange, onError, maxFiles = 5, maxSiz
 
     function getFileIcon(type: string) {
         if (type === 'application/pdf') return <FileText size={18} color="#ef4444" />
-        if (type.startsWith('image/')) return <Image size={18} color="#6366f1" />
+        if (type.startsWith('image/')) return <ImageIcon size={18} color="#6366f1" />
         return <FileText size={18} color="#6b7280" />
-    }
-
-    function formatFileSize(bytes: number) {
-        if (bytes < 1024) return bytes + ' B'
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
-        return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
     }
 
     async function processFiles(fileList: FileList | File[]) {
@@ -137,6 +131,7 @@ export function FileUpload({ files, onFilesChange, onError, maxFiles = 5, maxSiz
                             <span className={styles.fileIcon}>{getFileIcon(file.type)}</span>
                             <div className={styles.fileInfo}>
                                 {file.type.startsWith('image/') && (
+                                    /* eslint-disable-next-line @next/next/no-img-element */
                                     <img
                                         src={file.data}
                                         alt={file.name}

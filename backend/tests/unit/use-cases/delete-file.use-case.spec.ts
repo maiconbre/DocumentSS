@@ -36,7 +36,7 @@ describe('DeleteFileUseCase', () => {
         ])
 
         // Obtém o id interno do arquivo pelo FakeRepo
-        const stored = (repository as any).files as { id: string; documentId: string }[]
+        const stored = repository['files'] as { id: string; documentId: string }[]
         const fileId = stored.find((f: { documentId: string }) => f.documentId === doc.id)!.id
 
         await useCase.execute(fileId)

@@ -102,7 +102,7 @@ export class FakeDocumentRepository implements DocumentRepository {
         }
     }
 
-    async getFiles(documentId: string): Promise<any[]> {
+    async getFiles(documentId: string): Promise<{ id: string; name: string; type: string; data: string }[]> {
         return this.files
             .filter((f) => f.documentId === documentId)
             .map(({ id, name, type, data }) => ({ id, name, type, data }))
