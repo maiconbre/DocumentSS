@@ -1,6 +1,6 @@
 import { Document } from '../../domain/entities/document.entity'
 import { DocumentStatus } from '../../domain/enums/document-status.enum'
-import { DocumentResponseDTO } from '../dtos/document-response.dto'
+import { DocumentResponseDTO } from '../dtos/validation.schema'
 
 export class DocumentMapper {
     static toResponse(entity: Document): DocumentResponseDTO {

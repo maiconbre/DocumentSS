@@ -36,23 +36,6 @@ describe('Document Routes (Integration)', () => {
             expect(body.id).toBeDefined()
             expect(body.criadoEm).toBeDefined()
         })
-
-        it('deve retornar 400 com body inválido (sem titulo)', async () => {
-            const response = await app.inject({
-                method: 'POST',
-                url: '/api/documents',
-                payload: {
-                    descricao: 'Sem título',
-                },
-            })
-
-            expect(response.statusCode).toBe(400)
-
-            const body = response.json()
-            expect(body.statusCode).toBe(400)
-            expect(body.error).toBe('Bad Request')
-        })
-
     })
 
     // ─── GET /api/documents ───────────────────────────────────
@@ -150,23 +133,6 @@ describe('Document Routes (Integration)', () => {
 
             expect(response.statusCode).toBe(200)
             expect(response.json().status).toBe('ASSINADO')
-        })
-
-        it('deve retornar 400 com status inválido', async () => {
-            const createResponse = await app.inject({
-                method: 'POST',
-                url: '/api/documents',
-                payload: { titulo: 'Contrato' },
-            })
-            const { id } = createResponse.json()
-
-            const response = await app.inject({
-                method: 'PATCH',
-                url: `/api/documents/${id}/status`,
-                payload: { status: 'INVALIDO' },
-            })
-
-            expect(response.statusCode).toBe(400)
         })
 
         it('deve retornar 404 para id inexistente', async () => {

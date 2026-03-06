@@ -1,7 +1,7 @@
 import { DocumentRepository, CreateFileData } from '../../domain/repositories/document.repository'
 import { DocumentNotFoundError } from '../../domain/errors/document-not-found.error'
+import { DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
-import { DocumentResponseDTO } from '../dtos/document-response.dto'
 
 export class AddFilesUseCase {
     constructor(private readonly repository: DocumentRepository) { }

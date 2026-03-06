@@ -1,6 +1,5 @@
 import { DocumentRepository } from '../../domain/repositories/document.repository'
-import { CreateDocumentDTO } from '../dtos/create-document.dto'
-import { DocumentResponseDTO } from '../dtos/document-response.dto'
+import { CreateDocumentDTO, DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 
 export class CreateDocumentUseCase {

@@ -115,4 +115,5 @@ describe('Document Routes (E2E - Banco Real)', () => {
         // Cleanup
         await prisma.document.delete({ where: { id: doc.id } })
     })
+
 })

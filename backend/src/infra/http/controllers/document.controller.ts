@@ -9,6 +9,15 @@ import { DeleteDocumentUseCase } from '../../../application/use-cases/delete-doc
 import { AddFilesUseCase } from '../../../application/use-cases/add-files.use-case'
 import { GetFilesUseCase } from '../../../application/use-cases/get-files.use-case'
 import { DeleteFileUseCase } from '../../../application/use-cases/delete-file.use-case'
+import {
+    CreateDocumentRequestSchema,
+    UpdateDocumentStatusRequestSchema,
+    AddFilesRequestSchema,
+    ListDocumentsQuerySchema,
+    DocumentIdParamSchema,
+} from '../../../application/dtos/validation.schema'
+import { validateOrThrow } from '../../../application/validators/validate'
+import { InvalidDocumentStatusError, MissingParamError } from '../../../domain/errors/validation.error'
 
 export class DocumentController {
     private readonly createUseCase: CreateDocumentUseCase
@@ -35,7 +44,12 @@ export class DocumentController {
         request: FastifyRequest<{ Body: { titulo: string; descricao?: string } }>,
         reply: FastifyReply,
     ) {
-        const result = await this.createUseCase.execute(request.body)
+        const validatedData = validateOrThrow(
+            CreateDocumentRequestSchema,
+            request.body,
+        )
+
+        const result = await this.createUseCase.execute(validatedData)
         return reply.status(201).send(result)
     }
 
@@ -45,12 +59,15 @@ export class DocumentController {
         }>,
         reply: FastifyReply,
     ) {
-        const { page, limit, status } = request.query
+        const validatedQuery = validateOrThrow(
+            ListDocumentsQuerySchema,
+            request.query,
+        )
 
         const result = await this.listUseCase.execute({
-            page,
-            limit,
-            status: status as DocumentStatus | undefined,
+            page: validatedQuery.page,
+            limit: validatedQuery.limit,
+            status: validatedQuery.status as DocumentStatus | undefined,
         })
 
         return reply.status(200).send(result)
@@ -60,7 +77,9 @@ export class DocumentController {
         request: FastifyRequest<{ Params: { id: string } }>,
         reply: FastifyReply,
     ) {
-        const result = await this.getUseCase.execute(request.params.id)
+        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
+
+        const result = await this.getUseCase.execute(validatedParams.id)
         return reply.status(200).send(result)
     }
 
@@ -71,9 +90,15 @@ export class DocumentController {
         }>,
         reply: FastifyReply,
     ) {
-        const result = await this.updateStatusUseCase.execute(
-            request.params.id,
+        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
+        const validatedBody = validateOrThrow(
+            UpdateDocumentStatusRequestSchema,
             request.body,
+        )
+
+        const result = await this.updateStatusUseCase.execute(
+            validatedParams.id,
+            validatedBody,
         )
         return reply.status(200).send(result)
     }
@@ -82,7 +107,9 @@ export class DocumentController {
         request: FastifyRequest<{ Params: { id: string } }>,
         reply: FastifyReply,
     ) {
-        await this.deleteUseCase.execute(request.params.id)
+        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
+
+        await this.deleteUseCase.execute(validatedParams.id)
         return reply.status(204).send()
     }
 
@@ -93,9 +120,12 @@ export class DocumentController {
         }>,
         reply: FastifyReply,
     ) {
+        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
+        const validatedBody = validateOrThrow(AddFilesRequestSchema, request.body)
+
         const result = await this.addFilesUseCase.execute(
-            request.params.id,
-            request.body.arquivos,
+            validatedParams.id,
+            validatedBody.arquivos,
         )
         return reply.status(200).send(result)
     }
@@ -104,7 +134,9 @@ export class DocumentController {
         request: FastifyRequest<{ Params: { id: string } }>,
         reply: FastifyReply,
     ) {
-        const files = await this.getFilesUseCase.execute(request.params.id)
+        const validatedParams = validateOrThrow(DocumentIdParamSchema, request.params)
+
+        const files = await this.getFilesUseCase.execute(validatedParams.id)
         return reply.status(200).send(files)
     }
 
@@ -112,7 +144,14 @@ export class DocumentController {
         request: FastifyRequest<{ Params: { documentId: string; fileId: string } }>,
         reply: FastifyReply,
     ) {
-        await this.deleteFileUseCase.execute(request.params.fileId)
+        const validatedParams = validateOrThrow(
+            DocumentIdParamSchema.pick({ id: true }).extend({
+                fileId: DocumentIdParamSchema.shape.id,
+            }),
+            { id: request.params.documentId, fileId: request.params.fileId },
+        )
+
+        await this.deleteFileUseCase.execute(validatedParams.fileId)
         return reply.status(204).send()
     }
 }

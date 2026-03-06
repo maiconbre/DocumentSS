@@ -1,5 +1,5 @@
 import { DocumentRepository, FindAllParams } from '../../domain/repositories/document.repository'
-import { DocumentResponseDTO } from '../dtos/document-response.dto'
+import { DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 
 export interface ListDocumentsResult {

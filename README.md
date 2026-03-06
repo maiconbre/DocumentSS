@@ -1,6 +1,6 @@
 # DocumentSS — Gerenciamento de Documentos
 
-> API RESTful + Interface Web simples para gerenciamento de documentos, construída como teste prático fullstack.
+> API RESTful + Interface Web simples para gerenciamento de documentos, construída como teste prático fullstack com **Clean Architecture** e **Testes Automatizados**.
 
 ---
 
@@ -8,35 +8,65 @@
 
 | Camada | Tecnologias |
 |---|---|
-| **Backend** | Node.js · Fastify 5 · Prisma ORM · PostgreSQL |
-| **Frontend** | Next.js 14 · React · TypeScript · CSS Modules |
-| **Testes** | Vitest — unitários, integração, e2e (45 testes) |
+| **Backend** | Node.js · Fastify 5 · Prisma ORM · PostgreSQL · Zod |
+| **Frontend** | Next.js 16 · React 19 · TypeScript · CSS Modules |
+| **Testes** | Vitest — unitários, integração, e2e (63 testes) |
 | **Docs** | Swagger UI (OpenAPI 3) via `@fastify/swagger` |
 | **Infra** | Docker Compose · ESLint · Prettier |
 
 ---
 
+## Destaques
+
+✅ **Clean Architecture** — Separação de camadas (domain/application/infra)  
+✅ **Testes Automatizados** — 63 testes (unitários, integração, e2e)  
+✅ **SOLID Principles** — Injeção de dependência, interfaces, responsabilidade única  
+✅ **TypeScript Strict Mode** — Zero `any` implícito  
+✅ **Documentação Automática** — Swagger UI com schemas  
+✅ **Tratamento de Erros** — Global error handler com tipos diferenciados  
+✅ **DTOs e Validação** — Schemas para entrada/saída com validação
+
+---
+
 ## Arquitetura
 
-O backend segue **Clean Architecture** com separação estrita de camadas:
+### Backend — Clean Architecture
 
 ```
 backend/src/
-├── domain/       # Entidades, Enums, Erros, Interfaces — zero dependências externas
-├── application/  # Use Cases, DTOs, Mappers — depende apenas de domain/
-└── infra/        # Prisma, Controllers, Routes, Schemas — implementações concretas
+├── domain/                    # Camada de domínio — zero dependências externas
+│   ├── entities/              # Entidades de negócio
+│   ├── enums/                 # Enums (DocumentStatus)
+│   ├── errors/                # Custom errors
+│   └── repositories/          # Interfaces de repositório
+├── application/               # Lógica de aplicação — depende apenas de domain/
+│   ├── dtos/validation.schema.ts  # DTOs e schemas
+│   ├── use-cases/             # Orquestração de operações
+│   └── mappers/               # Conversão entity → DTO
+└── infra/                     # Implementações concretas
+    ├── config/                # Env, Logger
+    ├── database/              # Prisma Client
+    ├── repositories/          # PrismaDocumentRepository
+    └── http/
+        ├── controllers/       # Handlers HTTP
+        ├── middlewares/       # Error handler global
+        ├── plugins/           # CORS, Swagger
+        ├── routes/            # Registro de rotas
+        └── schemas/           # Schemas Swagger
 ```
 
+### Frontend
 
 ```
 frontend/src/
+├── app/                   # Next.js App Router
 ├── components/
-│   ├── ui/        # Modal, ConfirmModal, Toast, StatusBadge
-│   ├── documents/ # DocumentForm, DocumentList, DocumentViewer, FileUpload, SignatureModal
-│   └── layout/    # AppLayout (sidebar responsiva)
-├── hooks/         # useDocuments, useModal, useToast
-├── services/      # api.ts — 7 métodos tipados
-└── types/         # Tipos compartilhados frontend ↔ API
+│   ├── ui/                # Componentes reutilizáveis
+│   ├── documents/         # Features (List, Form, Upload)
+│   └── layout/            # Layout compartilhado
+├── hooks/                 # Custom hooks
+├── services/              # Client HTTP
+└── types/                 # Tipos compartilhados
 ```
 
 ---
@@ -96,20 +126,20 @@ Prefixo: `/api`
 ```bash
 cd backend
 
-npm run test              # Todos os testes (45)
-npm run test:unit         # Unitários
-npm run test:integration  # Integração
-npm run test:coverage     # Com relatório de cobertura
+npm run test              # Todos os testes (63)
+npm run test:unit         # Unitários (43)
+npm run test:integration  # Integração (18)
+npm run test:coverage     # Com cobertura
 ```
 
 ### Cobertura
 
 | Tipo | Escopo | Testes |
 |---|---|---|
-| **Unitário** | Use Cases (8), Mapper | 20 |
-| **Integração** | Rotas HTTP com repo in-memory | 20 |
-| **E2E** | Fluxo completo com banco real | 2 |
-| | **Total** | **45** |
+| **Unitário** | Use Cases (8), Mapper, Validation Schemas (consolidados) | 43 |
+| **Integração** | Rotas HTTP com repo in-memory | 18 |
+| **E2E** | Fluxo completo, persistência em banco real | 2 |
+| | **Total** | **63** |
 
 ---
 
@@ -120,13 +150,17 @@ npm run test:coverage     # Com relatório de cobertura
 ### Backend
 
 ```bash
-npm run dev              # Desenvolvimento
-npm run build            # Build de produção
-npm run start            # Produção
-npm run lint             # ESLint
-npm run format           # Prettier
-npm run prisma:migrate   # Executar migrations
-npm run prisma:seed      # Popular banco
+npm run dev              # Desenvolvimento com watch
+npm run build            # Build de produção (tsup)
+npm run start            # Executar build
+npm run test             # Rodar todos os testes
+npm run test:unit        # Só unitários
+npm run test:coverage    # Cobertura de testes
+npm run lint             # Verificar com ESLint
+npm run lint:fix         # Corrigir issues automaticamente
+npm run format           # Formatar com Prettier
+npm run prisma:migrate   # Executar migrations (dev)
+npm run prisma:seed      # Popular banco com dados de exemplo
 ```
 
 ### Frontend
@@ -134,7 +168,8 @@ npm run prisma:seed      # Popular banco
 ```bash
 npm run dev              # Desenvolvimento
 npm run build            # Build de produção
-npm run start            # Produção
+npm run start            # Produção (serve build)
+npm run lint             # ESLint check
 ```
 
 ---

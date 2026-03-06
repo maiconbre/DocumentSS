@@ -1,7 +1,6 @@
 import { DocumentRepository } from '../../domain/repositories/document.repository'
 import { DocumentNotFoundError } from '../../domain/errors/document-not-found.error'
-import { UpdateDocumentStatusDTO } from '../dtos/update-document-status.dto'
-import { DocumentResponseDTO } from '../dtos/document-response.dto'
+import { UpdateDocumentStatusDTO, DocumentResponseDTO } from '../dtos/validation.schema'
 import { DocumentMapper } from '../mappers/document.mapper'
 
 export class UpdateDocumentStatusUseCase {
