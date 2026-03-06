@@ -10,7 +10,7 @@
 |---|---|
 | **Backend** | Node.js · Fastify 5 · Prisma ORM · PostgreSQL · Zod |
 | **Frontend** | Next.js 16 · React 19 · TypeScript · CSS Modules |
-| **Testes** | Vitest — unitários, integração, e2e (63 testes) |
+| **Testes** | Vitest — unitários, integração, e2e (64 testes) |
 | **Docs** | Swagger UI (OpenAPI 3) via `@fastify/swagger` |
 | **Infra** | Docker Compose · ESLint · Prettier |
 
@@ -114,8 +114,8 @@ Prefixo: `/api`
 ```bash
 cd backend
 
-npm run test              # Todos os testes (63)
-npm run test:unit         # Unitários (43)
+npm run test              # Todos os testes (64)
+npm run test:unit         # Unitários (44)
 npm run test:integration  # Integração (18)
 npm run test:coverage     # Com cobertura
 ```
@@ -124,10 +124,10 @@ npm run test:coverage     # Com cobertura
 
 | Tipo | Escopo | Testes |
 |---|---|---|
-| **Unitário** | Use Cases (8), Mapper, Validation Schemas (consolidados) | 43 |
+| **Unitário** | Use Cases (8), Mapper, Validation Schemas (consolidados) | 44 |
 | **Integração** | Rotas HTTP com repo in-memory | 18 |
 | **E2E** | Fluxo completo, persistência em banco real | 2 |
-| | **Total** | **63** |
+| | **Total** | **64** |
 
 ---
 
