@@ -8,9 +8,19 @@ const testCases = {
     AddFilesRequestSchema,
 };
 
+// Obter o tipo do primeiro argumento da função jsonSchemaTransform
+type TransformInput = Parameters<typeof jsonSchemaTransform>[0];
+
 for (const [name, schema] of Object.entries(testCases)) {
     try {
-        const result = jsonSchemaTransform({ schema: { body: schema, response: { 200: schema } } });
+        const input = {
+            schema: { body: schema, response: { 200: schema } },
+            url: '/test',
+            route: {} as import('fastify').RouteOptions,
+            openapiObject: { openapi: '3.0.0' },
+        } as TransformInput;
+
+        const result = jsonSchemaTransform(input);
         console.log(`${name}: OK`);
     } catch (err: any) {
         console.error(`${name}: FAILED =>`, err.message);
