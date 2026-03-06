@@ -16,18 +16,6 @@
 
 ---
 
-## Destaques
-
-✅ **Clean Architecture** — Separação de camadas (domain/application/infra)  
-✅ **Testes Automatizados** — 63 testes (unitários, integração, e2e)  
-✅ **SOLID Principles** — Injeção de dependência, interfaces, responsabilidade única  
-✅ **TypeScript Strict Mode** — Zero `any` implícito  
-✅ **Documentação Automática** — Swagger UI com schemas  
-✅ **Tratamento de Erros** — Global error handler com tipos diferenciados  
-✅ **DTOs e Validação** — Schemas para entrada/saída com validação
-
----
-
 ## Arquitetura
 
 ### Backend — Clean Architecture
